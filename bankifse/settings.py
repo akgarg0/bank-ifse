@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import dj_database_url
 from datetime import timedelta
+import django_heroku
 
 # Database URL
 DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -100,24 +101,12 @@ WSGI_APPLICATION = 'bankifse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'postgresql': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dcbausq9sa2hrb',
-        'USER': 'ruzwmcguxqdgyg',
-        'PASSWORD': '4efb56df46150ae958db53f7c7a28fd3850797152574efbbb66d7939abb39732',
-        'HOST': 'ec2-174-129-226-232.compute-1.amazonaws.com',
-        'PORT': 5432,
-    }
-}
+DATABASES = {'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}, 'postgresql': dj_database_url.config(conn_max_age=600, ssl_require=True)}
 
 # Heroku PostGreSql DB
-DATABASES['postgresql'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
 
 
 # Password validation
@@ -157,3 +146,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Heroku Setup
+django_heroku.settings(locals())
